@@ -1,8 +1,7 @@
 package mx.ucq.estudio.entraid.config;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import mx.ucq.estudio.entraid.support.GroupsClaimMapper;
+import mx.ucq.estudio.entraid.support.NamedOidcUser;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +12,9 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
-import mx.ucq.estudio.entraid.support.GroupsClaimMapper;
-import mx.ucq.estudio.entraid.support.NamedOidcUser;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Configuration
@@ -31,22 +31,22 @@ public class JwtAuthorizationConfiguration {
         .build();
         // @formatter:on
     }
-    
+
     private OAuth2UserService<OidcUserRequest, OidcUser> customOidcUserService(JwtAuthorizationProperties props) {
         final OidcUserService delegate = new OidcUserService();
         final GroupsClaimMapper mapper = new GroupsClaimMapper(
-          props.getAuthoritiesPrefix(), 
-          props.getGroupsClaim(),
-          props.getGroupToAuthorities());
-        
+                props.getAuthoritiesPrefix(),
+                props.getGroupsClaim(),
+                props.getGroupToAuthorities());
+
         return userRequest -> {
             OidcUser oidcUser = delegate.loadUser(userRequest);
-            // Enrich standard authorities with groups 
+            // Enrich standard authorities with groups
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
             mappedAuthorities.addAll(oidcUser.getAuthorities());
             mappedAuthorities.addAll(mapper.mapAuthorities(oidcUser));
 
-            oidcUser = new NamedOidcUser(mappedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo(),oidcUser.getName());
+            oidcUser = new NamedOidcUser(mappedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo(), oidcUser.getName());
 
             return oidcUser;
         };

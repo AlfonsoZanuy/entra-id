@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <!-- Add your CSS styles and other assets here -->
 </head>
 <body>
-$END$
+<div>
+    <!-- Use Thymeleaf expression ${errorMessage} to display the error message -->
+    <h1 th:text="${errorMessage}">OOops! Something went wrong - default message.</h1>
+    <p>We apologize for the inconvenience. The requested page is not available at the moment.</p>
+    <!-- You can add more helpful information or links to guide users -->
+</div>
 </body>
 </html>

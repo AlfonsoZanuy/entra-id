@@ -14,24 +14,8 @@ public class IndexController {
     @GetMapping("")
     public String index(Model model, Authentication user) {
         log.info("GET /: user={}", user);
-        log.info("GET /: user={}");
-        System.out.println(user);
-        System.out.println("inicio");
-        System.out.println(user.getName());
-        System.out.println(user.getAuthorities());
-        System.out.println("Fin");
         model.addAttribute("user", user);
         return "index";
     }
-    @GetMapping("/index")
-    public String index2(Model model, Authentication user) {
-        log.info("GET /: user={}", user);
-        System.out.println(user);
-        System.out.println("inicio");
-        System.out.println(user.getName());
-        System.out.println(user.getAuthorities());
-        System.out.println("Fin");
-        model.addAttribute("user", user);
-        return "index";
-    }
+
 }
